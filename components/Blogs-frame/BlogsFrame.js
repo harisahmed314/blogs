@@ -1,39 +1,39 @@
 import React from 'react';
 
 // Assuming this is your JSON data
-const bloggers = [
-  {
-    "id": 1,
-    "name": "John Doe",
-    "blogTitle": "Tech Updates",
-    "blogPost": "Latest trends in AI.",
-    "like":25,
-    "comment":14,
-    "avatarUrl": "https://th.bing.com/th/id/R.5a34e855b8d2d68172c1dbe183b6814d?rik=YHUeeqCnYIs0NA&pid=ImgRaw&r=0"
-  },
-  {
-    "id": 2,
-    "name": "Jane Smith",
-    "blogTitle": "Healthy Living",
-    "blogPost": "Best vegan recipes.",
-    "avatarUrl": "https://th.bing.com/th/id/OIP.k7sywqb9JCHyxr7Yl2wlYQAAAA?pid=ImgDet&w=182&h=273&c=7",
-    "like":25,
-    "comment":14
+// const bloggers = [
+//   {
+//     "id": 1,
+//     "name": "John Doe",
+//     "blogTitle": "Tech Updates",
+//     "blogPost": "Latest trends in AI.",
+//     "like":25,
+//     "comment":14,
+//     "avatarUrl": "https://th.bing.com/th/id/R.5a34e855b8d2d68172c1dbe183b6814d?rik=YHUeeqCnYIs0NA&pid=ImgRaw&r=0"
+//   },
+//   {
+//     "id": 2,
+//     "name": "Jane Smith",
+//     "blogTitle": "Healthy Living",
+//     "blogPost": "Best vegan recipes.",
+//     "avatarUrl": "https://th.bing.com/th/id/OIP.k7sywqb9JCHyxr7Yl2wlYQAAAA?pid=ImgDet&w=182&h=273&c=7",
+//     "like":25,
+//     "comment":14
 
-  },
-  {
-    "id": 3,
-    "name": "William Johnson",
-    "blogTitle": "Travel Diaries",
-    "blogPost": "Exploring Paris.",
-    "like":25,
-    "comment":14,
-    "avatarUrl": "https://i2.wp.com/austinemedia.com/wp-content/uploads/2019/09/7-6.jpg?resize=642%2C638&ssl=1"
-  }
-]
+//   },
+//   {
+//     "id": 3,
+//     "name": "William Johnson",
+//     "blogTitle": "Travel Diaries",
+//     "blogPost": "Exploring Paris.",
+//     "like":25,
+//     "comment":14,
+//     "avatarUrl": "https://i2.wp.com/austinemedia.com/wp-content/uploads/2019/09/7-6.jpg?resize=642%2C638&ssl=1"
+//   }
+// ]
 
 
-const BloggersList = () => {
+const BloggersList = ({bloggers}) => {
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
@@ -76,5 +76,17 @@ const BloggersList = () => {
     </section>
   );
 };
+
+export async function getStaticProps() {
+    const res = await fetch('/api/bloggerdata'); // Replace 'yourApiRoute' with the actual route of your API.
+    const data = await res.json();
+    const bloggers = data.movie; // movie is the data fetched from your API.
+  
+    return {
+      props: {
+        bloggers,
+      },
+    };
+  }
 
 export default BloggersList;
