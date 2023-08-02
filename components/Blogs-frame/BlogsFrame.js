@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Assuming this is your JSON data
 // const bloggers = [
@@ -33,12 +33,33 @@ import React from 'react';
 // ]
 
 
-const BloggersList = ({bloggers}) => {
-  return (
-    <section className="text-gray-600 body-font">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="flex flex-wrap -m-4">
-          {bloggers.map(blogger => (
+
+
+
+const BloggersList = () => {
+  const [bloggers, setBloggers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('/api/bloggerdata');
+      const data = await response.json();
+      
+      if (data && data.movie) {
+        setBloggers(data.movie);
+      } else {
+        console.error('Unexpected API response', data);
+      }
+    }
+  
+    fetchData();
+  }, []);
+
+  
+    return (
+        <section className="text-gray-600 body-font">
+          <div className="container px-5 py-24 mx-auto">
+            <div className="flex flex-wrap -m-4">
+              {bloggers.map(blogger => (
             <div key={blogger.id} className="p-4 md:w-1/3">
               <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
                 <img className="lg:h-48 md:h-36 w-full object-cover object-center" src={blogger.avatarUrl} alt={`Avatar of ${blogger.name}`} />
@@ -77,16 +98,5 @@ const BloggersList = ({bloggers}) => {
   );
 };
 
-export async function getStaticProps() {
-    const res = await fetch('/api/bloggerdata'); // Replace 'yourApiRoute' with the actual route of your API.
-    const data = await res.json();
-    const bloggers = data.movie; // movie is the data fetched from your API.
-  
-    return {
-      props: {
-        bloggers,
-      },
-    };
-  }
 
 export default BloggersList;
