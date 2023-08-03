@@ -1,5 +1,4 @@
 import { MongoClient } from "mongodb";
-import { NextResponse } from "next/server";
 
 export default async function handler(req, res) {
   // Replace the uri string with your connection string.
@@ -8,22 +7,23 @@ export default async function handler(req, res) {
   const client = new MongoClient(uri);
 
   try {
-    // Connect to the MongoDB client
     await client.connect();
 
     const database = client.db('blogger');
-    const collection = database.collection('data');
-
-    // Query for all documents in the collection
-    const data = await collection.find().toArray();
-
-    // Return the data as a JSON response
-    NextResponse.json({ data });
+    const movies = database.collection('data');
   
+    // Query for a movie that has the title 'Back to the Future'
+    const query = {  };
+    const data = await movies.find(query).toArray();
+
+    console.log(data); // Log the movie data
+
+    // Send movie data as response
+    res.status(200).json({ data});
 
   } catch (error) {
-    // Return an error response
-    res.status(500).json({ error: error.message });
+    console.error(error); // Log any error occurred
+    res.status(500).json({ error: 'An error occurred while fetching data' }); // Send error as response
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
